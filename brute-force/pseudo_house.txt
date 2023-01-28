@@ -1,0 +1,14 @@
+classe House():
+    metodo_construtor(x, y:Inteiro, name :Caractere):
+    inicio
+        parametro.x <- x
+        parametro.y <- y
+        parametro.name <- name
+    fimmetodo
+    metodo distant(house :Objeto):
+    inicio 
+        retorne valor_absoluto(parametro.x - house.x) + valor_absoluto(parametro.y - house.y)
+    fimmetodo
+fimclasse
+
+A complexidade temporal desta classe é O(1) porque o construtor e o método "distant" ambos realizam operações de tempo constante. O construtor atribui valores às variáveis da classe e o método "distant" realiza operações matemáticas simples nas variáveis da classe. Todas essas operações levam tempo constante, então a complexidade temporal geral é O(1).

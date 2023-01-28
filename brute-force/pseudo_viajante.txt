@@ -1,0 +1,46 @@
+funcao (routes :Vetor, r: Objeto)
+var 
+    minim, x, y :inteiro
+    rt :caractere
+    route, distanci :Vetor
+inicio
+    para (x de 0 ate sizeof(routes) passo 1) faca 
+        route <- ['R']
+        distanci <- [r.distant(routes[x][0])]
+        para (y de 0 ate sizeof(routes[x]) passo 1) faca
+            route.acrescentar(routes[x][y].name)
+            se (y < sizeof(routes[x])-1) entao
+                distanci.acrescentar(routes[x][y].distant(routes[x][y+1]))
+            fimse
+        fimpara
+        route.acrescentar('R')
+        distanci.acrescentar(r.distant(routes[x][-1]))
+        se (minim = 0 or minim > sum(distanci)) entao
+            minim <- sum(distanci)
+            rt <- route 
+        fimse
+    fimpara
+    retorne 'A menor rota é %s com exatos %d dronômetros'%(rt, minim)
+fimfuncao
+
+A complexidade temporal desta função é O(n^2) onde n é o tamanho do vetor de entrada "routes". Isso ocorre porque há um laço aninhado nas linhas 7-22, onde o laço externo executa n vezes e o laço interno executa m vezes, onde m é o tamanho de "routes[x]". Cada iteração do laço interno leva um tempo constante para realizar as operações nas linhas 11-14 e 18-20, portanto, a complexidade temporal geral é O(n*m) que pode ser simplificada para O(n^2) se n for aproximadamente igual a m.
+
+
+
+funcao menor_distancia_file(url)
+var
+    datas, r :Objeto
+    matriz, routes :Vetor   
+inicio
+    datas = DateEntry(url)
+    matriz = datas.create_matriz(datas.read_file())
+    routes = datas.create_routes(matriz)
+    r = list(filtro el: el.name esta em 'R', routes))[0]
+    routes = permut(list(filtro el: el.name esta em 'R', routes)))
+    retorne menor(routes, r)
+fimfuncao
+A complexidade temporal desta função é O(n! + n^2) onde n é o número de elementos no arquivo de entrada.
+
+A primeira operação realizada é a leitura do arquivo, que leva O(n) tempo. Em seguida, as funções create_matriz e create_routes levam O(n) tempo cada. Em seguida, a função permut leva O(n!) tempo, pois gera todas as permutações possíveis da entrada. Por fim, a função menor tem complexidade O(n^2) devido ao laço aninhado nela.
+
+Então, a complexidade temporal geral é O(n) + O(n) + O(n!) + O(n^2) que pode ser simplificada como O(n! + n^2)
