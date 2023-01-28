@@ -7,7 +7,7 @@ Este projeto foi desenvolvido para a disciplina de Programação de Inteligênci
 
 O problema é definido por uma matriz onde os pontos de entrega são representados por valores diferentes de 0 e o ponto de origem e retorno (R) é sempre representado pelo valor 0. O drone só pode se mover na horizontal ou na vertical, e não pode se mover na diagonal.
 
-Consulte **[Descrição](https://github.com/JoseEliodoro/Flyfood/blob/master/PISI2%20-%20Descri%C3%A7%C3%A3o%20do%20projeto%20-%20Flyfood.pdf)** para saber como implantar o projeto.
+Consulte **[Descrição](https://github.com/JoseEliodoro/Flyfood/blob/master/PISI2%20-%20Descri%C3%A7%C3%A3o%20do%20projeto%20-%20Flyfood.pdf)** para saber mais sobre o projeto.
 
 ## 📋 Entrada
 A entrada é fornecida através de um arquivo texto onde cada linha representa uma linha da matriz.
