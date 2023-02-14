@@ -1,6 +1,6 @@
 from input import DateInput
 from permutation import permut
-from time import time
+from time import process_time
 
 def menor(routes, r):
     minim, rt = 0, ''
@@ -35,9 +35,25 @@ def menor_distancia_file(url):
     routes = permut(list(filter(lambda el: not el.name in 'R', routes)))
     
     return menor(routes, r)
+""" 
+0 0 0 0 D
+0 A 0 0 0
+0 0 0 0 C
+R 0 B 0 0
 
+A 0 0 0 L 0
+0 E 0 0 0 0
+0 0 0 K 0 R
+Y 0 0 0 0 0
+G 0 0 I 0 Z
 
-a = time()
+0 J 0 0 L
+U 0 N M 0
+Y H 0 0 0
+A B T 0 0
+0 0 0 0 R
+"""
+a = process_time()
 print(menor_distancia_file('route.txt'))
-b = time()
-print(b - a)
+b = process_time()
+print('%.90f'%(b-a))

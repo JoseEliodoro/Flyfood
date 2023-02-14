@@ -2,6 +2,7 @@ classe DateInput():
     metodo_construtor(url :Caractere)
     inicio
         parametro.url <- url
+
     fimmetodo
     metodo read_file(url:Caractere):
     var
@@ -11,6 +12,7 @@ classe DateInput():
             line <- obj.readlines()
         retorne line
     fimmetodo
+
     metodo create_router(text :Caractere):
     var
         x, y :Inteiro
@@ -31,3 +33,4 @@ classe DateInput():
 fimclasse
 
 A complexidade temporal desta função é O(n^2) onde n é o número de linhas no arquivo de entrada. Há dois loops aninhados nas linhas 20-28, o loop externo roda n vezes, onde n é o número de linhas no arquivo de entrada, e o loop interno roda m vezes, onde m é o número de elementos em uma linha. Cada iteração do loop interno leva um tempo constante para realizar as operações nas linhas 23-24, então a complexidade temporal geral é O(n*m) que pode ser simplificada para O(n^2) se n é aproximadamente igual a m.
+

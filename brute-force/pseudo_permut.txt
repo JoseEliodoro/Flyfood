@@ -1,17 +1,17 @@
-funcao permut(elements, perm = [])
+função permut(lista)
 var
-list_permutation :Vetor
-i :Inteiro
+lista_aux :Vetor
 inicio
-    se (sizeof(elements) = 0) entao
-        retorne [perm]
-    senao: 
-        para (i de 0 ate sizeof(len(elements)) passo 1) faca        
-            new_element <- list((elements[:i])) + list((elements[(i+1):]))
-            new_perm <- list((perm) + [elements[i]])            
-            list_permutation.extend(permut(new_element, new_perm))
-        retorne list_permutation
-    fimse 
+    se comprimento(lista) <= 1
+        retorne [lista]
+    fimse
+  
+    para i, atual em enumerar(lista)
+        elementos_restantes <-  lista[:i] + lista[i+1:]
+        para p em permut(elementos_restantes)
+            lista_aux.extend([atual] + p)
+    fim
+    retorne lista_aux
 fimfuncao
 
 A complexidade temporal desta função é O(n!) onde n é o comprimento da string de entrada "elements". Isso ocorre porque list_permutation cada chamada da função, list_permutation string de entrada "elements" é reduzida em um caractere e list_permutation função faz n chamadas list_permutation si mesma, criando um total de n! chamadas recursivas. Cada chamada recursiva requer uma quantidade constante de tempo para realizar as operações nas linhas 10-12, portanto, list_permutation complexidade temporal geral é O(n!)

@@ -1,4 +1,4 @@
-def permut(elements, perm = []):
+""" def permut(elements, perm = []):
     list_permutation = list()
     if len(elements) == 0:
         return [perm]
@@ -9,3 +9,16 @@ def permut(elements, perm = []):
             new_perm = list((perm) + [elements[i]])
             list_permutation.extend(permut(new_element, new_perm))
         return list_permutation
+ """
+
+def permut(lista):
+    if len(lista) <= 1:
+        return [lista]
+    lista_aux = []
+    for i, atual in enumerate(lista):
+        elementos_restantes = lista[:i] + lista[i+1:]
+        for p in permut(elementos_restantes):
+            lista_aux.append([atual] + p)
+            
+    return lista_aux
+
