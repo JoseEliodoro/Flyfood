@@ -43,12 +43,12 @@ def tournament(lista: List[float]) -> int:
 
 # Função que calcula a distancia de uma rota
 def calc_distances(router: List[object], r: object) -> float:
-  distancia = r.distant(router[0])
-  for index, el in enumerate(router):
-    if index < len(router)-1:
-      distancia += el.distant(router[index+1])
-  distancia += router[-1].distant(r)
-  return distancia
+  d= r.distant(router[0])
+  for i, el in enumerate(router):
+    if i != len(router)-1:
+      d += el.distant(router[i+1])
+  d += r.distant(router[-1])
+  return d
 
 # Função que calcula a distancia de todas as rotas em uma lista
 def calc_all_distances(list_city: List[object]) -> List[float]:
@@ -70,6 +70,19 @@ def fitness(pop_list: List[float]) -> List[float]:
   for index, el in enumerate(pop_list):
     fitness_list[index] = cos(el*radians(90))
   return fitness_list
+
+# Função de cruzamento de genes
+def cx(parent1, parent2):
+  size = len(parent1)
+  index = randint(0, size - 1)
+  child = [None] * size
+  temp1, temp2 = parent1[index:], parent2[index:] + parent2[:index]
+  for i in range(size):
+    if parent1[i] in temp2:
+      child[i] = parent1[i]
+    else:
+      child[i] = temp1.pop(0)
+  return child
 
 # Função de cruzamento de genes
 def PMX(father1, father2):
@@ -124,7 +137,7 @@ def print_pop(pop_list: List[List[object]], distance_list: List[float], generati
     print('Rota: %s Distancia: %.3f' %('-'.join(el+el[0]), distance_list[i])) """
   #graph([pop_list[better_ind]], generation)
   print('Melhor solução da %sº geracao é %s e sua distancia foi %.3f.'
-    %(generation,(route_name[better_ind]+'-' + route_name[better_ind][0]), int(distance_list[better_ind]))
+    %(generation,(route_name[better_ind]+'-' + route_name[better_ind].split('-')[0]), int(distance_list[better_ind]))
   )
 
 # Função que seleciona um pai
@@ -172,7 +185,7 @@ lista = []
 a = 'berlin52.tsp'
 b ='d198.tsp'
 c = 'burma14.tsp'
-with open (a) as obj_file:
+with open (c) as obj_file:
   text =obj_file.readlines()
   
 for i, el in enumerate(text[8:-1]):
@@ -182,6 +195,7 @@ for i, el in enumerate(text[8:-1]):
       line.append(float(x))
   lista.append(House(line[1], line[2], str(int(line[0]))))
       
+
 
 evolution(
   data= lista,

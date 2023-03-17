@@ -6,8 +6,8 @@ class House():
     self.name = name
       
   def distant(self, house: object):
-    x = pow(house.x - self.x, 2)
-    y = pow(house.y - self.y, 2)
+    x = pow(abs(house.x - self.x), 2)
+    y = pow(abs(house.y - self.y), 2)
     return int(pow(x + y, .5))
     #return abs(self.x - house.x) + abs(self.y - house.y)
   

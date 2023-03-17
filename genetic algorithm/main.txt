@@ -1,0 +1,195 @@
+# Função da roleta
+função roleta(lista: vetor de reais) -> inteiro
+  rand = aleatório() * somar_elementos(lista)
+  soma = 0
+  para i de 0 até tamanho_do_vetor(lista) - 1 faça
+    soma = soma + lista[i]
+    se soma >= rand então
+      retorne i
+      fim_se
+    fim_para
+fim_função
+
+# Função para cirar a população inicial
+função criar_população_inicial(arr: vetor de objetos, n_individual: inteiro) -> vetor de vetores
+  n_individual = abs(n_individual)
+  se (n_individual > fatorial(tamanho_do_vetor(arr))) então
+    n_individual = fatorial(tamanho_do_vetor(arr))
+  fim_se
+
+  permuts = [Nulo] * n_individual
+  count = 0
+
+  enquanto (count < n_individual) faça
+    permut_generacto = ordenar(arr, lambda x: aleatório())[:tamanho_do_vetor(arr)]
+    se não permut_generacto está em permuts então
+      permuts[count] = permut_generacto
+      count = count + 1
+    fim_se
+  fim_enquanto
+  retorne permuts
+fim_função
+
+# Função para calcular a distancia de uma unica rota
+função calcular_distancias(router: vetor de objetos, r: objeto) -> real
+  distancia = r.distant(router[0])
+  para index de 0 até tamanho_do_vetor(router) - 1 faça
+    se index < tamanho_do_vetor(router)-1 então
+      distancia = distancia + el.distant(router[index+1])
+    fim_se
+  fim_para
+  distancia = distancia + router[tamanho_do_vetor(router)-1].distant(r)
+  retorne distancia
+fim_função
+
+# Função para calcular a distancia de todas as rotas
+função calcular_todas_as_distancias(lista_cidades: vetor de objetos) -> vetor de reais
+  rotas = [Nulo] * tamanho_do_vetor(lista_cidades)
+  para i de 0 até tamanho_do_vetor(lista_cidades) - 1 faça
+    rotas[i] = calcular_distancias(lista_cidades[i][1:], lista_cidades[i][0])
+  fim_para
+  retorne rotas
+fim_função
+
+# Função que escalona uma lista
+função escalonar_lista(lst: vetor de reais) -> vetor de reais
+  min_val = mínimo(lst)
+  max_val = máximo(lst)
+  lst_escalada = [0] * tamanho_do_vetor(lst)
+  para i de 0 até tamanho_do_vetor(lst) - 1 faça
+    lst_escalada[i] = (lst[i] - min_val + 1) / (max_val - min_val + 1)
+  fim_para
+  retorne lst_escalada
+fim_função
+
+# Função que calcula a aptidão de todos os individuos
+função fitness(pop_list: vetor de reais) -> vetor de reais
+  fitness_list = [Nulo] * tamanho_do_vetor(pop_list)
+  para i de 0 até tamanho_do_vetor(pop_list) - 1 faça
+    fitness_list[i] = cos(pop_list[i] * radians(90))
+  fim_para
+  retorne fitness_list
+fim_função
+
+# Função de cruzamento por CX de dois pais para gerar um filho
+função CX(parente1: vetor, parente2: vetor) -> vetor
+  tamanho = tamanho_do_vetor(parente1)
+  indice = aleatório(0, tamanho - 1)
+  filho = [Nulo] * tamanho
+  temp1, temp2 = parente1[indice:], parente2[indice:] + parente2[:indice]
+  para i de 0 até tamanho - 1 faça
+    se parente1[i] está em temp2 então
+      filho[i] = parente1[i]
+    senão
+      filho[i] = temp1[0]
+      temp1 = remover_primeiro(temp1)
+    fim_se
+  fim_para
+  retorne filho
+fim_função
+
+# função de cruzamento por PMX de dois pais para gerar um filho
+função PMX(pai1: vetor, pai2: vetor) -> vetor
+  ponto_de_corte1 = aleatório(0, tamanho_do_vetor(pai1) - 1)
+  ponto_de_corte2 = aleatório(0, tamanho_do_vetor(pai1) - 1)
+  se ponto_de_corte1 > ponto_de_corte2 então
+    ponto_de_corte1, ponto_de_corte2 = ponto_de_corte2, ponto_de_corte1
+  fim_se
+  filhos = copiar_vetor(pai1)
+  para i de ponto_de_corte1 até ponto_de_corte2 - 1 faça
+    se pai2[i] não está em filhos[ponto_de_corte1:ponto_de_corte2] então
+      j = encontrar_indice(pai1, pai2[i])
+      filhos[i], filhos[j] = filhos[j], filhos[i]
+    fim_se
+  fim_para
+  para i de ponto_de_corte1 até ponto_de_corte2 - 1 faça
+    se pai2[i] não está em filhos[ponto_de_corte1:ponto_de_corte2] então
+      j = encontrar_indice(pai1, pai2[i])
+      filhos[j], filhos[i] = filhos[i], filhos[j]
+    fim_se
+  fim_para
+  retorne filhos
+fim_função
+
+# Função que cruza dois pais e retorna dois filhos
+função crossover_fathers(father1: lista de objetos, father2: lista de objetos, crossover_rate: float) -> tupla de lista de objetos :
+  se random() < crossover_rate então
+    retornar PMX(father1, father2), PMX(father2, father1)
+  senão
+    retornar father1, father2
+  fim_se
+fim_função
+
+# Função que cruza todos os pais e retorna a lista de filhos
+função crossover(fathers_list: lista de lista de objetos, crossover_rate: float) -> lista de lista de objetos:
+  children_list = [None] * tamanho(fathers_list)
+  para i de 0 até tamanho(fathers_list) passo 2 faça
+    son1, son2 = crossover_fathers(fathers_list[i], fathers_list[i + 1], crossover_rate)
+    children_list[i], children_list[i + 1] = son1, son2
+  fim_para
+  retornar children_list
+fim_função
+
+# Função de mutação de para todos os individuos
+Função mutation(pop_list: Lista de Listas de Objetos, mutation_rate: Float) -> Lista de Listas de Objetos:
+  Para cada indivíduo i na população pop_list:
+    Se um número aleatório entre 0 e 1 for menor ou igual ao mutation_rate:
+      Seleciona aleatoriamente duas posições a e b no indivíduo i
+      Troca os elementos nas posições a e b do indivíduo i
+    fim_se
+  fim_para
+  Retorna a população pop_list mutada
+fim_função
+
+# Função que recebe uma lista de rotas e retorna uma lista com o nome de cada lugar a ser visitado
+Função Name_route(route: Lista de listas de objetos) -> Lista de strings
+  name = Lista vazia do tamanho da lista de roteiros
+  Para i de 0 até o tamanho da lista de rotas:
+    house = Lista vazia
+    Para z em rota[i]:
+      house.adicionar(z.nome)
+    fim_para
+    name[i] = união('-'.join(house))
+  fim_para
+  retornar nome
+Fim da Função
+
+# Função que imprime o melhor individuo da geração
+função print_pop(pop_list: lista de listas de objetos, distance_list: lista de floats, generation: inteiro) -> vazio:
+  route_name = Name_route(pop_list)
+  melhor_indice = índice da menor distância em distance_list
+  imprime "Melhor solução da " + generation + "º geração é " + route_name[melhor_indice] + "-" + route_name[melhor_indice][0] + " e sua distância foi " + int(distance_list[melhor_indice]) + "."
+fim_função
+
+# Função que recebe a população e seleciona os próximos pais
+Função select_fathers(pop_list, sel_func):
+  distancias_escaladas = scale_list(calc_all_distances(pop_list))
+  fitness_list = fitness(distancias_escaladas)
+  fathers_list = lista vazia do tamanho da pop_list
+  Para count variando de 0 até o tamanho de fathers_list, de 2 em 2:
+    father1 = sel_func(fitness_list)
+    father2 = sel_func(fitness_list[:father1]+fitness_list[father1+1:])
+    fathers_list[count] = pop_list[father1]
+    fathers_list[count + 1] = pop_list[father2]
+  fim_para
+  Retorne fathers_list
+fim_função
+
+# Função que apartir dos parametros informados retorna a evolução dos individuos
+função evolução(
+  dados: Lista[objetos], n_individuals: inteiro, n_generations: inteiro, 
+  crossover_rate: flutuante, mutation_rate: flutuante, sel_func
+) -> Tupla[Lista[Lista[objetos]], Lista[flutuantes]]:
+  
+  população_inicial = criar_população_inicial(dados, n_individuals)
+  
+  para geracao em faixa(n_generations):
+    distancias = calcular_todas_distancias(população_inicial)
+    imprimir_população(população_inicial, distancias, geracao)
+    pais = selecionar_pais(população_inicial, sel_func)
+    filhos = crossover(pais, crossover_rate)
+    filhos_mutados = mutação(filhos, mutation_rate)
+    população_inicial = filhos_mutados[:]
+  fim_para
+  retornar população_inicial, distancias
+fim_função
