@@ -35,6 +35,7 @@ def roulette(lista: List[float]) -> int:
     soma += apt
     if soma >= rand:
       return i
+  return len(lista)-1
 
 # Função de torneio dando chances iguais a todos individuos
 def tournament(lista: List[float]) -> int:
@@ -160,6 +161,18 @@ def mutation(pop_list: List[List[object]], mutation_rate: float):
       pop_list[i][a], pop_list[i][b] = pop_list[i][b], pop_list[i][a]
   return pop_list
 
+# Função de elitismo
+def elitismo(population: List[List[object]]) -> List[List[object]]:
+  distances_list = calc_all_distances(population)
+  fitness_list = fitness(distances_list)
+  new_pop = [None] * int(len(fitness_list)/2)
+  for i, el in enumerate(new_pop):
+    index = roulette(fitness_list)
+    new_pop[i] = population.pop(index)
+    fitness_list.pop(index)
+  #print(new_pop, len(new_pop), )
+  return new_pop
+    
 # Função de evolução que cuida de controlar todas as gerações
 def evolution(
   data: List[object], n_individuals: int, n_generations: int, 
@@ -170,13 +183,15 @@ def evolution(
   
   for generation in range(n_generations):
     distances = calc_all_distances(initial_population)
-    #print_pop(initial_population, distances, generation)
+    print_pop(initial_population, distances, generation)
     parents = select_fathers(initial_population, sel_func)
     sons = crossover(parents, crossover_rate)
     mutated_sons = mutation(sons, mutation_rate)
-    initial_population = mutated_sons[:]
+    
+    #initial_population = mutated_sons
+    initial_population = elitismo(initial_population + mutated_sons)
+    
   distances=calc_all_distances(initial_population)
-  
   print_pop(initial_population, distances, generation)
   return initial_population, distances
 
@@ -186,22 +201,22 @@ lista = []
 a = 'berlin52.tsp'
 b ='d198.tsp'
 c = 'burma14.tsp'
-with open (c) as obj_file:
+with open (a) as obj_file:
   text =obj_file.readlines()
   
-for i, el in enumerate(text[8:-1]):
+for i, el in enumerate(text[6:-1]):
   line = []
   for index, x in enumerate(el.replace('\n', ' ').split(' ')):
     if (x != ''):
       line.append(float(x))
 
-  lista.append(House(line[1]*100, line[2]*100, str(int(line[0]))))
+  lista.append(House(line[1], line[2], str(int(line[0]))))
 
 
 p, d = evolution(
   data= lista,
   n_individuals= 20,
-  n_generations= 2000,
+  n_generations= 1000,
   crossover_rate=0.8,
   mutation_rate= 0.1,
   sel_func=roulette
