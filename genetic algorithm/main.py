@@ -108,7 +108,7 @@ def PMX(father1, father2):
 # Função de cruzamento de dois pais
 def crossover_fathers(father1: List[object], father2: List[object], crossover_rate: float)-> Tuple[list, list] :
   if random() < crossover_rate:
-    return PMX(father1, father2), PMX(father2, father1)
+    return cx(father1, father2), cx(father2, father1)
   return father1, father2
 
 # Função de cruzamento de todos os pais
@@ -137,7 +137,7 @@ def print_pop(pop_list: List[List[object]], distance_list: List[float], generati
     print('Rota: %s Distancia: %.3f' %('-'.join(el+el[0]), distance_list[i])) """
   #graph([pop_list[better_ind]], generation)
   print('Melhor solução da %sº geracao é %s e sua distancia foi %.3f.'
-    %(generation,(route_name[better_ind]+'-' + route_name[better_ind].split('-')[0]), int(distance_list[better_ind]))
+    %(generation,(route_name[better_ind]+'-' + route_name[better_ind].split('-')[0]), distance_list[better_ind])
   )
 
 # Função que seleciona um pai
@@ -170,13 +170,14 @@ def evolution(
   
   for generation in range(n_generations):
     distances = calc_all_distances(initial_population)
-    print_pop(initial_population, distances, generation)
+    #print_pop(initial_population, distances, generation)
     parents = select_fathers(initial_population, sel_func)
     sons = crossover(parents, crossover_rate)
     mutated_sons = mutation(sons, mutation_rate)
     initial_population = mutated_sons[:]
+  distances=calc_all_distances(initial_population)
   
-
+  print_pop(initial_population, distances, generation)
   return initial_population, distances
 
 
@@ -193,15 +194,16 @@ for i, el in enumerate(text[8:-1]):
   for index, x in enumerate(el.replace('\n', ' ').split(' ')):
     if (x != ''):
       line.append(float(x))
-  lista.append(House(line[1], line[2], str(int(line[0]))))
-      
+
+  lista.append(House(line[1]*100, line[2]*100, str(int(line[0]))))
 
 
-evolution(
+p, d = evolution(
   data= lista,
   n_individuals= 20,
-  n_generations= 1000,
+  n_generations= 2000,
   crossover_rate=0.8,
   mutation_rate= 0.1,
   sel_func=roulette
 )
+

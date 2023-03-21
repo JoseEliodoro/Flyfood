@@ -8,7 +8,7 @@ class House():
   def distant(self, house: object):
     x = pow(abs(house.x - self.x), 2)
     y = pow(abs(house.y - self.y), 2)
-    return int(pow(x + y, .5))
+    return pow(x + y, .5)
     #return abs(self.x - house.x) + abs(self.y - house.y)
   
   def __eq__(self, __o: object) -> bool:
